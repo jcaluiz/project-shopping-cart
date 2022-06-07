@@ -26,9 +26,7 @@ const createProductItemElement = ({ sku, name, image }) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-const cartItemClickListener = (event) => {
-  // coloque seu código
-};
+const cartItemClickListener = (event) => event.target.parentNode.removeChild(event.target);
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
   const li = document.createElement('li');
@@ -57,11 +55,11 @@ const appendCartItems = async () => {
           .parentNode
           .firstElementChild
           .innerText);
-        return console.log(elementFetchItem.appendChild(createCartItemElement({
+        return elementFetchItem.appendChild(createCartItemElement({
           sku: functionFetchItem.id,
           name: functionFetchItem.title,
           salePrice: functionFetchItem.price,
-        })));
+        }));
       }));
 };
 
