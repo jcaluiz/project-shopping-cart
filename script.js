@@ -1,3 +1,5 @@
+const elementFetchItem = document.querySelector('.cart__items');
+
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -26,7 +28,10 @@ const createProductItemElement = ({ sku, name, image }) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-const cartItemClickListener = (event) => event.target.parentNode.removeChild(event.target);
+const cartItemClickListener = (event) => {
+  event.target.parentNode.removeChild(event.target);
+  saveCartItems(elementFetchItem.innerHTML);
+};
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
   const li = document.createElement('li');
@@ -47,25 +52,32 @@ const append = async () => {
 
 const appendCartItems = async () => {
   const buttonAddItem = document.querySelectorAll('.item__add');
-  const elementFetchItem = document.querySelector('.cart__items');
   return buttonAddItem
-    .forEach((element) => element
-      .addEventListener('click', async () => {
-        const functionFetchItem = await fetchItem(element
-          .parentNode
-          .firstElementChild
-          .innerText);
-        return elementFetchItem.appendChild(createCartItemElement({
-          sku: functionFetchItem.id,
-          name: functionFetchItem.title,
-          salePrice: functionFetchItem.price,
-        }));
+  .forEach((element) => element
+  .addEventListener('click', async () => {
+    const functionFetchItem = await fetchItem(element
+      .parentNode
+      .firstElementChild
+      .innerText);
+      const elementChild = elementFetchItem.appendChild(createCartItemElement({
+        sku: functionFetchItem.id,
+        name: functionFetchItem.title,
+        salePrice: functionFetchItem.price,
       }));
-};
-
+      saveCartItems(elementFetchItem.innerHTML);
+      return elementChild;
+    }));
+  };
+  
+  const getLocalStorage = () => {
+    elementFetchItem.innerHTML = getSavedCartItems();
+    elementFetchItem.addEventListener('click', cartItemClickListener);
+  };
+  
 async function render() {
   await append();
   await appendCartItems();
+  getLocalStorage();
 }
 
 window.onload = () => {
