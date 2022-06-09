@@ -1,6 +1,21 @@
 const elementFetchItem = document.querySelector('.cart__items');
 const priceInHTML = document.querySelector('.total-price');
 
+const carregandoText = () => {
+  const mainElement = document.querySelector('.container');
+  const h3 = document.createElement('h3');
+  h3.className = 'loading';
+  mainElement.appendChild(h3);
+  h3.innerHTML = 'carregando...';
+};
+carregandoText();
+
+const removeText = () => {
+  const mainElement = document.querySelector('.container');
+  const h3 = document.querySelector('.loading');
+  mainElement.removeChild(h3);
+};
+
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -111,6 +126,7 @@ async function render() {
   getLocalStorage();
   calculatorPrice();
   esvaziarCarrinho();
+  removeText();
 }
 
 window.onload = () => {
