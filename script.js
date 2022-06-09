@@ -33,7 +33,7 @@ const cartItemClickListener = (event) => {
   elementFetchItem.removeChild(event.target);
 };
 
-const numbers = [];
+let numbers = [];
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
   const li = document.createElement('li');
@@ -94,11 +94,23 @@ const calculatorPrice = () => {
   priceInHTML.innerHTML = parseFloat(JSON.parse(localStorage.getItem('calculo'))) || 0;
 };
 
-  async function render() {
-    await append();
-    await appendCartItems();
-    getLocalStorage();
-    calculatorPrice();
+const esvaziarCarrinho = () => {
+  const buttonEsvaziar = document.querySelector('.empty-cart');
+  buttonEsvaziar.addEventListener('click', () => {
+    localStorage.clear();
+    numbers = [];
+    localStorage.setItem('calculo', JSON.stringify(0));
+    priceInHTML.innerHTML = 0;
+    elementFetchItem.innerHTML = '';
+  });
+};
+
+async function render() {
+  await append();
+  await appendCartItems();
+  getLocalStorage();
+  calculatorPrice();
+  esvaziarCarrinho();
 }
 
 window.onload = () => {
